@@ -19,7 +19,7 @@ ansible_platform_install_secret_file_name: ames_secret.yml
 ```
 ansible_platform_install_offline_token: 123456
 ```
-- [Download Red Hat Ansible Automation Platform](https://access.redhat.com/downloads/content/480/ver=2.4/rhel---9/2.4/x86_64/product-software "Download Red Hat Ansible Automation Platform")
+- [Download Red Hat Ansible Automation Platform](https://access.redhat.com/downloads/content/480/ver=2.4/rhel---9/2.4/x86_64/product-software "Download Red Hat Ansible Automation Platform")<br>
 **Legacy Install**
 ```
 ansible_platform_install_aap_non_container_bundle_sha_value: "730c4b831a8c1cddd0a7023db2dd1159d0aebd2dc81921fe3224999d771b5dfb"
