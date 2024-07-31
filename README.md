@@ -16,6 +16,8 @@ Automate that Ansible Automation Platform install
 
 ![alt text](https://github.com/ericcames/aap.platform.install/blob/main/images/tag-legacy.png "Legacy tag")
 
+**Login and run your appropriate installer command**
+
 **Legacy Ansible Platform install command line with vaulted creds**
 ```
 ./setup.sh -e@ames_vault.yml -- --vault-password-file ~/.ssh/secret
