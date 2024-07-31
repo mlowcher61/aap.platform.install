@@ -21,6 +21,7 @@ Role Variables
 ```
 ansible_platform_install_vault_file_name: ames_vault.yml
 ansible_platform_install_secret_file_name: ames_secret.yml
+ansible_platform_install_containerized_controller_url: testaap.kona.services
 ```
 - [Get Red Hat Offline Token](https://access.redhat.com/management/api "Red Hat Offline Token")
 ```

@@ -7,3 +7,4 @@ ansible_platform_install_hub_postinstall_repo_url: https://github.com/ericcames/
 ansible_platform_install_vault_file_name: ames_vault.yml
 ansible_platform_install_secret_file_name: ames_secret.yml
 ansible_platform_install_aap_non_container_bundle_sha_value: "730c4b831a8c1cddd0a7023db2dd1159d0aebd2dc81921fe3224999d771b5dfb"
+ansible_platform_install_containerized_controller_url: testaap.kona.services
