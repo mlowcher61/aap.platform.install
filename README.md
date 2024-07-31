@@ -1,4 +1,4 @@
-# aap.platform.install
+# Ansible Automation Platform Installation
 Automate that Ansible Automation Platform install
 
 **Legacy Ansible Platform install command line with vaulted creds**
