@@ -2,6 +2,13 @@ ansible_platform_install
 =========
 
 This role will install and configure legacy ansible and containerized ansible.  The role uses tags to control what tasks are executed.
+```
+For original platform use the legacy tag.
+- legacy
+
+For the containerized platform use the container tag.
+- container
+```
 
 Requirements
 ------------
