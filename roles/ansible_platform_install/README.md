@@ -28,7 +28,7 @@ ansible_platform_install_containerized_controller_url: testaap.kona.services
 ```
 ansible_platform_install_offline_token: 123456
 ```
-- [Download Red Hat Ansible Automation Platform](https://access.redhat.com/downloads/content/480/ver=2.4/rhel---9/2.4/x86_64/product-software "Download Red Hat Ansible Automation Platform")<br>
+- [Download Red Hat Ansible Automation Platform](https://access.redhat.com/downloads/content/480/ver=2.4/rhel---9/2.4/x86_64/product-software "Download Red Hat Ansible Automation Platform") <br>
 
 **Legacy Install**
 ```
