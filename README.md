@@ -3,7 +3,7 @@ Automate that Ansible Automation Platform install
 
 **Build an infrastructure that meets the requirements**
 
-[Red Hat Ansible Automation Platform 2.4](https://access.redhat.com/management/api "Red Hat Ansible Automation Platform 2.4")
+[Red Hat Ansible Automation Platform 2.4](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.4/ "Red Hat Ansible Automation Platform 2.4")
 
 **Legacy Ansible Platform install command line with vaulted creds**
 ```
