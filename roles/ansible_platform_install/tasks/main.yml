@@ -1,0 +1,173 @@
+---
+- name: Copy our encrypted AAP manifest file into place
+  tags:
+    - container
+  ansible.builtin.copy:
+    src: files/{{ ansible_platform_install_manifest_file_name }}
+    dest: /home/ansible-svc/.manifest
+    owner: ansible-svc
+    group: ansible-svc
+    mode: '0644'
+    decrypt: true
+
+- name: Copy our secret file into place
+  tags:
+    - container
+  ansible.builtin.copy:
+    src: files/{{ ansible_platform_install_secret_file_name }}
+    dest: /home/ansible-svc/.ssh/secret
+    owner: ansible-svc
+    group: ansible-svc
+    mode: '0600'
+    decrypt: true
+
+- name: Copy our secret file into place for non-containerized install
+  become: true
+  become_user: root
+  tags:
+    - legacy
+  ansible.builtin.copy:
+    src: files/{{ ansible_platform_install_secret_file_name }}
+    dest: /root/.ssh/secret
+    owner: root
+    group: root
+    mode: '0600'
+    decrypt: true
+
+- name: Ensure we have a access token the Red Hat Customer portal
+  tags:
+    - always
+  register: access_token
+  until: access_token is not failed
+  retries: 1
+  delay: 20
+  ansible.builtin.uri:
+    url: https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
+    method: POST
+    body_format: form-urlencoded
+    return_content: true
+    body:
+      grant_type: refresh_token
+      client_id: rhsm-api
+      refresh_token: "{{ ansible_platform_install_offline_token }}"
+
+- name: Ensure we have the AAP bundle
+  tags:
+    - container
+  register: download_aap_tarball
+  until: download_aap_tarball is not failed
+  retries: 15
+  delay: 20
+  ansible.builtin.get_url:
+    url: https://api.access.redhat.com/management/v1/images/{{ ansible_platform_install_aap_bundle_sha_value }}/download
+    headers:
+      accept: application/json
+      Authorization: Bearer {{ access_token.json.access_token }}
+    dest: /home/ansible-svc/aap.tar.gz
+    checksum: "sha256: {{ ansible_platform_install_aap_bundle_sha_value }}"
+    owner: ansible-svc
+    group: ansible-svc
+    mode: '0644'
+
+- name: Ensure we have the non-containerized AAP bundle
+  tags:
+    - legacy
+  become: true
+  become_user: root
+  register: download_aap_tarball
+  until: download_aap_tarball is not failed
+  retries: 15
+  delay: 20
+  ansible.builtin.get_url:
+    url: https://api.access.redhat.com/management/v1/images/{{ ansible_platform_install_aap_non_container_bundle_sha_value }}/download
+    headers:
+      accept: application/json
+      Authorization: Bearer {{ access_token.json.access_token }}
+    dest: /root/aap.tar.gz
+    checksum: "sha256: {{ ansible_platform_install_aap_non_container_bundle_sha_value }}"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Ensure the aap bundle is opened up
+  tags:
+    - container
+  become: false
+  ansible.builtin.unarchive:
+    src: /home/ansible-svc/aap.tar.gz
+    dest: /home/ansible-svc/
+    remote_src: true
+
+- name: Ensure the non-containerized aap bundle is opened up
+  tags:
+    - legacy
+  become: true
+  become_user: root
+  ansible.builtin.unarchive:
+    src: /root/aap.tar.gz
+    dest: /root/
+    remote_src: true
+
+- name: Ensure we have the AAP bundle directory
+  tags:
+    - container
+  register: aap_bundle_dir
+  changed_when: false
+  ansible.builtin.shell: ls -d /home/ansible-svc/ansible-automation-platform-containerized-*
+
+- name: Ensure we have the non-containerized AAP bundle directory
+  tags:
+    - legacy
+  become: true
+  become_user: root
+  register: non_containerized_aap_bundle_dir
+  changed_when: false
+  ansible.builtin.shell: ls -d /root/ansible-automation-platform-setup-bundle-*
+
+- name: Ensure the containerized inventory file is configured to install the Controller
+  tags:
+    - container
+  ansible.builtin.template:
+    src: templates/containerized_aap_24_inventory_controller_file.j2
+    dest: "{{ aap_bundle_dir.stdout }}/inventory"
+    owner: ansible-svc
+    group: ansible-svc
+    mode: "0644"
+    backup: true
+
+- name: Ensure the legacy inventory file is configured to install the Controller
+  tags:
+    - legacy
+  become: true
+  become_user: root
+  ansible.builtin.template:
+    src: templates/legacy_aap_24_inventory_controller_file.j2
+    dest: "{{ non_containerized_aap_bundle_dir.stdout }}/inventory"
+    owner: root
+    group: root
+    mode: "0644"
+    backup: true
+
+- name: Copy vault into place
+  tags:
+    - container
+  ansible.builtin.copy:
+    src: files/{{ vault_file_name }}
+    dest: "{{ aap_bundle_dir.stdout }}/{{ vault_file_name }}"
+    owner: ansible-svc
+    group: ansible-svc
+    mode: '0644'
+    decrypt: false
+
+- name: Copy vault into place for non-containerized install
+  tags:
+    - legacy
+  become: true
+  become_user: root
+  ansible.builtin.copy:
+    src: files/{{ vault_file_name }}
+    dest: "{{ non_containerized_aap_bundle_dir.stdout }}/{{ vault_file_name }}"
+    owner: root
+    group: root
+    mode: '0644'
+    decrypt: false
