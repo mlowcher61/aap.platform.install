@@ -8,7 +8,13 @@ Automate that Ansible Automation Platform install
 **Create vaults for your secrets using ansible-vault**
 - [Password to unlock your vault](https://github.com/ericcames/aap.platform.install/blob/main/roles/ansible_platform_install/files/secret_example.yml "Password to unlock your vault")
 - [Vault that will be used by the inventory file](https://github.com/ericcames/aap.platform.install/blob/main/roles/ansible_platform_install/files/vault_example.yml "Vault that will be used by the inventory file")
+
+**Update role default variables**
 - [Update your role default variables](https://github.com/ericcames/aap.platform.install/blob/main/roles/ansible_platform_install/README.md "Update your role default variables")
+
+**Create your job template with the appropriate tag**
+
+![alt text](https://github.com/ericcames/aap.platform.install/blob/main/images/tag-legacy.png "Legacy tag")
 
 **Legacy Ansible Platform install command line with vaulted creds**
 ```
